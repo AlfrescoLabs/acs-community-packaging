@@ -6,12 +6,13 @@ version: "2"
 
 services:
     transform-core-aio:
-        image: alfresco/alfresco-transform-core-aio:2.5.3
+        image: alfresco/alfresco-transform-core-aio:latest
         mem_limit: 1536m
         environment:
             JAVA_OPTS: " -Xms256m -Xmx1536m"
         ports:
             - 8090:8090
+            - 9096:9095
 
     postgres:
         image: postgres:13.3
@@ -23,25 +24,23 @@ services:
         command: postgres -c max_connections=300 -c log_min_messages=LOG
         ports:
             - 5432:5432
-
-    solr6:
-        image: alfresco/alfresco-search-services:2.0.0
-        mem_limit: 2g
-        environment:
-            #Solr needs to know how to register itself with Alfresco
-            - SOLR_ALFRESCO_HOST=alfresco
-            - SOLR_ALFRESCO_PORT=8080
-            #Alfresco needs to know how to call solr
-            - SOLR_SOLR_HOST=solr6
-            - SOLR_SOLR_PORT=8983
-            #Create the default alfresco and archive cores
-            - SOLR_CREATE_ALFRESCO_DEFAULTS=alfresco,archive
-            #HTTP by default
-            - ALFRESCO_SECURE_COMMS=none
-            - "SOLR_JAVA_MEM=-Xms2g -Xmx2g"
-        ports:
-            - 8083:8983 #Browser port
-
+#    solr6:
+#        image: alfresco/alfresco-search-services:2.0.0
+#        mem_limit: 2g
+#        environment:
+#            #Solr needs to know how to register itself with Alfresco
+#            - SOLR_ALFRESCO_HOST=alfresco
+#            - SOLR_ALFRESCO_PORT=8080
+#            #Alfresco needs to know how to call solr
+#            - SOLR_SOLR_HOST=solr6
+#            - SOLR_SOLR_PORT=8983
+#            #Create the default alfresco and archive cores
+#            - SOLR_CREATE_ALFRESCO_DEFAULTS=alfresco,archive
+#            #HTTP by default
+#            - ALFRESCO_SECURE_COMMS=none
+#            - "SOLR_JAVA_MEM=-Xms2g -Xmx2g"
+#        ports:
+#            - 8083:8983 #Browser port
     activemq:
         image: alfresco/alfresco-activemq:5.16.1
         mem_limit: 1g
